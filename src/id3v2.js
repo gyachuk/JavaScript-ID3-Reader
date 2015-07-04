@@ -282,9 +282,13 @@
                 readFrameFunc = ID3v2.readFrameData[frameID];
             } else if( frameID[0] == "T" ) {
                 readFrameFunc = ID3v2.readFrameData["T*"];
+            } else {
+                readFrameFunc = function(frameDataOffset, frameSize, framedata, flags) {
+                    return frameData.getStringAt(frameDataOffset, frameSize);
+                }
             }
             
-            var parsedData = readFrameFunc ? readFrameFunc(frameDataOffset, frameSize, frameData, flags) : undefined;
+            var parsedData = readFrameFunc(frameDataOffset, frameSize, frameData, flags);
             var desc = frameID in ID3v2.frames ? ID3v2.frames[frameID] : 'Unknown';
         
             var frame = {
